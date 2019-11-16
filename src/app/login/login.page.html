@@ -1,0 +1,27 @@
+<ion-header translucent>
+  <ion-toolbar>
+    <ion-title>Datos Empresa</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content fullscreen>
+  
+    <ion-list lines="full" class="ion-no-margin ion-no-padding">
+      <ion-item>
+        <ion-label position="stacked">Rut<ion-text color="danger">*</ion-text></ion-label>
+        <ion-input required type="text" [(ngModel)]="txtRut" formatRut></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label position="stacked">Nombre <ion-text color="danger">*</ion-text></ion-label>
+        <ion-input required type="text" oninput="handleLastNameValue(event)"></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label position="stacked">Rubro <ion-text color="danger">*</ion-text></ion-label>
+        <ion-input required type="text" oninput="handleLastNameValue(event)"></ion-input>
+      </ion-item>
+    </ion-list>
+    <div class="ion-padding">
+      <ion-button expand="block" class="ion-no-margin" (click)="openTodoAlert()" >Registrarse</ion-button>
+    </div>
+  
+</ion-content>
