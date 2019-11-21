@@ -386,17 +386,22 @@ var LoginPage = /** @class */ (function () {
                     _this.datos = data;
                     console.log(_this.datos);
                 }, function (error) { return tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"](_this, void 0, void 0, function () {
-                    var alert;
+                    var msj, alert;
                     return tslib__WEBPACK_IMPORTED_MODULE_0__["__generator"](this, function (_a) {
                         switch (_a.label) {
                             case 0:
                                 console.log('error');
                                 //get datos
                                 console.log(error.error.Mensaje);
+                                msj = '';
+                                if (error.error.Codigo == 10200)
+                                    msj = 'Empresa no se encuentra inscrita en ChileProveedores.';
+                                else
+                                    msj = 'Problemas internos, intente más tarde.';
                                 return [4 /*yield*/, this.alertController.create({
                                         header: 'Alert',
                                         subHeader: 'Mensaje',
-                                        message: error.error.Mensaje,
+                                        message: msj,
                                         buttons: ['OK']
                                     })];
                             case 1:

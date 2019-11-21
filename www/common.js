@@ -374,6 +374,235 @@ var blockedTags = ['script', 'style', 'iframe', 'meta', 'link', 'object', 'embed
 
 
 
+/***/ }),
+
+/***/ "./src/app/pages/auth/login/login.page.html":
+/*!**************************************************!*\
+  !*** ./src/app/pages/auth/login/login.page.html ***!
+  \**************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = "<ion-header>\n  <ion-toolbar>\n    <!-- <ion-button color=\"light\" (click)=\"dismissLogin()\">Close</ion-button> -->\n    <ion-title>Empresa Proveedor</ion-title>\n  </ion-toolbar>\n</ion-header>\n<ion-content padding>\n  <form #form=\"ngForm\" (ngSubmit)=\"login(form)\" method=\"post\">\n    <ion-item>\n      <ion-label position=\"floating\">Rut</ion-label>\n      <ion-input ngModel type=\"text\" name=\"rut\"></ion-input>\n    </ion-item>\n   \n    <p text-right>Olvidó su contraseña?</p>\n  \n    <ion-button type=\"submit\" expand=\"full\" color=\"primary\">Iniciar</ion-button>\n  </form>\n  <p text-center>No tiene una cuenta?</p>\n  <ion-button expand=\"full\" color=\"danger\" (click)=\"registerModal()\">Registrarse</ion-button>\n</ion-content>\n\n"
+
+/***/ }),
+
+/***/ "./src/app/pages/auth/login/login.page.scss":
+/*!**************************************************!*\
+  !*** ./src/app/pages/auth/login/login.page.scss ***!
+  \**************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = "\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IiIsImZpbGUiOiJzcmMvYXBwL3BhZ2VzL2F1dGgvbG9naW4vbG9naW4ucGFnZS5zY3NzIn0= */"
+
+/***/ }),
+
+/***/ "./src/app/pages/auth/login/login.page.ts":
+/*!************************************************!*\
+  !*** ./src/app/pages/auth/login/login.page.ts ***!
+  \************************************************/
+/*! exports provided: LoginPage */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "LoginPage", function() { return LoginPage; });
+/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
+/* harmony import */ var _ionic_angular__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @ionic/angular */ "./node_modules/@ionic/angular/dist/fesm5.js");
+/* harmony import */ var _register_register_page__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../register/register.page */ "./src/app/pages/auth/register/register.page.ts");
+/* harmony import */ var src_app_services_auth_service__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! src/app/services/auth.service */ "./src/app/services/auth.service.ts");
+/* harmony import */ var src_app_services_alert_service__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! src/app/services/alert.service */ "./src/app/services/alert.service.ts");
+
+
+
+
+
+
+var LoginPage = /** @class */ (function () {
+    function LoginPage(modalController, authService, navCtrl, alertService) {
+        this.modalController = modalController;
+        this.authService = authService;
+        this.navCtrl = navCtrl;
+        this.alertService = alertService;
+    }
+    LoginPage.prototype.ngOnInit = function () {
+    };
+    // Dismiss Login Modal
+    LoginPage.prototype.dismissLogin = function () {
+        this.modalController.dismiss();
+    };
+    // On Register button tap, dismiss login modal and open register modal
+    LoginPage.prototype.registerModal = function () {
+        return tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"](this, void 0, void 0, function () {
+            var registerModal;
+            return tslib__WEBPACK_IMPORTED_MODULE_0__["__generator"](this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        this.dismissLogin();
+                        return [4 /*yield*/, this.modalController.create({
+                                component: _register_register_page__WEBPACK_IMPORTED_MODULE_3__["RegisterPage"]
+                            })];
+                    case 1:
+                        registerModal = _a.sent();
+                        return [4 /*yield*/, registerModal.present()];
+                    case 2: return [2 /*return*/, _a.sent()];
+                }
+            });
+        });
+    };
+    LoginPage.prototype.login = function (form) {
+        this.dismissLogin();
+        this.navCtrl.navigateRoot('/dashboard');
+        //   this.authService.login(form.value.email, form.value.password).subscribe(
+        //     data => {
+        //       this.alertService.presentToast("Logged In");
+        //     },
+        //     error => {
+        //       console.log(error);
+        //     },
+        //     () => {
+        //       this.dismissLogin();
+        //       this.navCtrl.navigateRoot('/dashboard');
+        //     }
+        //   );
+    };
+    LoginPage = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Component"])({
+            selector: 'app-login',
+            template: __webpack_require__(/*! ./login.page.html */ "./src/app/pages/auth/login/login.page.html"),
+            styles: [__webpack_require__(/*! ./login.page.scss */ "./src/app/pages/auth/login/login.page.scss")]
+        }),
+        tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:paramtypes", [_ionic_angular__WEBPACK_IMPORTED_MODULE_2__["ModalController"],
+            src_app_services_auth_service__WEBPACK_IMPORTED_MODULE_4__["AuthService"],
+            _ionic_angular__WEBPACK_IMPORTED_MODULE_2__["NavController"],
+            src_app_services_alert_service__WEBPACK_IMPORTED_MODULE_5__["AlertService"]])
+    ], LoginPage);
+    return LoginPage;
+}());
+
+
+
+/***/ }),
+
+/***/ "./src/app/pages/auth/register/register.page.html":
+/*!********************************************************!*\
+  !*** ./src/app/pages/auth/register/register.page.html ***!
+  \********************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = "<ion-header>\n  <ion-toolbar>\n    <ion-title>Registro Empresa Proveedor</ion-title>\n  </ion-toolbar>\n</ion-header>\n<ion-content padding>\n  <form #form=\"ngForm\" (ngSubmit)=\"register(form)\" method=\"post\">\n      <ion-item>\n          <ion-label color=\"danger\" class=\"ion-text-wrap\">\n            Para registrarse debe estar inscrito en chileproveedores.\n          </ion-label>\n        </ion-item>\n    <ion-item>\n      <ion-label position=\"floating\">Rut</ion-label>\n      <ion-input type=\"text\" ngModel name=\"rut\"></ion-input>\n    </ion-item>\n  \n    <ion-item>\n      <ion-label position=\"floating\">Rubro</ion-label>\n      <ion-input type=\"text\" ngModel name=\"rubro\"></ion-input>\n    </ion-item>\n  \n    <ion-button type=\"submit\" expand=\"full\" color=\"danger\">Registrar</ion-button>\n  </form>\n  <p text-center>Tiene cuenta?</p>\n  <ion-button expand=\"full\" color=\"primary\" (click)=\"loginModal()\">Iniciar</ion-button>\n</ion-content>  \n"
+
+/***/ }),
+
+/***/ "./src/app/pages/auth/register/register.page.scss":
+/*!********************************************************!*\
+  !*** ./src/app/pages/auth/register/register.page.scss ***!
+  \********************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = "\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IiIsImZpbGUiOiJzcmMvYXBwL3BhZ2VzL2F1dGgvcmVnaXN0ZXIvcmVnaXN0ZXIucGFnZS5zY3NzIn0= */"
+
+/***/ }),
+
+/***/ "./src/app/pages/auth/register/register.page.ts":
+/*!******************************************************!*\
+  !*** ./src/app/pages/auth/register/register.page.ts ***!
+  \******************************************************/
+/*! exports provided: RegisterPage */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "RegisterPage", function() { return RegisterPage; });
+/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
+/* harmony import */ var _ionic_angular__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @ionic/angular */ "./node_modules/@ionic/angular/dist/fesm5.js");
+/* harmony import */ var _login_login_page__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../login/login.page */ "./src/app/pages/auth/login/login.page.ts");
+/* harmony import */ var src_app_services_auth_service__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! src/app/services/auth.service */ "./src/app/services/auth.service.ts");
+/* harmony import */ var src_app_services_alert_service__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! src/app/services/alert.service */ "./src/app/services/alert.service.ts");
+
+
+
+
+
+
+var RegisterPage = /** @class */ (function () {
+    function RegisterPage(modalController, authService, navCtrl, alertService) {
+        this.modalController = modalController;
+        this.authService = authService;
+        this.navCtrl = navCtrl;
+        this.alertService = alertService;
+    }
+    RegisterPage.prototype.ngOnInit = function () {
+    };
+    // Dismiss Register Modal
+    RegisterPage.prototype.dismissRegister = function () {
+        this.modalController.dismiss();
+    };
+    // On Login button tap, dismiss Register modal and open login Modal
+    RegisterPage.prototype.loginModal = function () {
+        return tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"](this, void 0, void 0, function () {
+            var loginModal;
+            return tslib__WEBPACK_IMPORTED_MODULE_0__["__generator"](this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        this.dismissRegister();
+                        return [4 /*yield*/, this.modalController.create({
+                                component: _login_login_page__WEBPACK_IMPORTED_MODULE_3__["LoginPage"],
+                            })];
+                    case 1:
+                        loginModal = _a.sent();
+                        return [4 /*yield*/, loginModal.present()];
+                    case 2: return [2 /*return*/, _a.sent()];
+                }
+            });
+        });
+    };
+    RegisterPage.prototype.register = function (form) {
+        this.dismissRegister();
+        this.navCtrl.navigateRoot('/dashboard');
+        // this.authService.register(form.value.fName, form.value.lName, form.value.email, form.value.password).subscribe(
+        //   data => {
+        //     this.authService.login(form.value.email, form.value.password).subscribe(
+        //       data => {
+        //       },
+        //       error => {
+        //         console.log(error);
+        //       },
+        //       () => {
+        //         this.dismissRegister();
+        //         this.navCtrl.navigateRoot('/dashboard');
+        //       }
+        //     );
+        //     this.alertService.presentToast(data['message']);
+        //   },
+        //   error => {
+        //     console.log(error);
+        //   },
+        //   () => {
+        //   }
+        // );
+    };
+    RegisterPage = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Component"])({
+            selector: 'app-register',
+            template: __webpack_require__(/*! ./register.page.html */ "./src/app/pages/auth/register/register.page.html"),
+            styles: [__webpack_require__(/*! ./register.page.scss */ "./src/app/pages/auth/register/register.page.scss")]
+        }),
+        tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:paramtypes", [_ionic_angular__WEBPACK_IMPORTED_MODULE_2__["ModalController"],
+            src_app_services_auth_service__WEBPACK_IMPORTED_MODULE_4__["AuthService"],
+            _ionic_angular__WEBPACK_IMPORTED_MODULE_2__["NavController"],
+            src_app_services_alert_service__WEBPACK_IMPORTED_MODULE_5__["AlertService"]])
+    ], RegisterPage);
+    return RegisterPage;
+}());
+
+
+
 /***/ })
 
 }]);

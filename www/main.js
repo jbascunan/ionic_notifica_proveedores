@@ -442,13 +442,32 @@ var map = {
 		"./src/app/home/home.module.ts",
 		"home-home-module"
 	],
+	"./inicio/inicio.module": [
+		"./src/app/inicio/inicio.module.ts",
+		"inicio-inicio-module"
+	],
 	"./login/login.module": [
 		"./src/app/login/login.module.ts",
 		"login-login-module"
 	],
-	"./pages/inicio/inicio.module": [
-		"./src/app/pages/inicio/inicio.module.ts",
-		"pages-inicio-inicio-module"
+	"./pages/auth/login/login.module": [
+		"./src/app/pages/auth/login/login.module.ts",
+		"common",
+		"pages-auth-login-login-module"
+	],
+	"./pages/auth/register/register.module": [
+		"./src/app/pages/auth/register/register.module.ts",
+		"common",
+		"pages-auth-register-register-module"
+	],
+	"./pages/dashboard/dashboard.module": [
+		"./src/app/pages/dashboard/dashboard.module.ts",
+		"pages-dashboard-dashboard-module"
+	],
+	"./pages/landing/landing.module": [
+		"./src/app/pages/landing/landing.module.ts",
+		"common",
+		"pages-landing-landing-module"
 	]
 };
 function webpackAsyncContext(req) {
@@ -460,7 +479,7 @@ function webpackAsyncContext(req) {
 			throw e;
 		});
 	}
-	return __webpack_require__.e(ids[1]).then(function() {
+	return Promise.all(ids.slice(1).map(__webpack_require__.e)).then(function() {
 		var id = ids[0];
 		return __webpack_require__(id);
 	});
@@ -491,11 +510,16 @@ __webpack_require__.r(__webpack_exports__);
 
 var routes = [
     //{ path: '', loadChildren: './tabs/tabs.module#TabsPageModule' },
-    { path: '', redirectTo: 'login', pathMatch: 'full' },
+    //{ path: '', redirectTo: 'inicio', pathMatch: 'full' },
+    { path: '', redirectTo: 'landing', pathMatch: 'full' },
     { path: 'home', loadChildren: './home/home.module#HomePageModule' },
     { path: 'alert', loadChildren: './alert/alert.module#AlertPageModule' },
-    { path: 'inicio', loadChildren: './pages/inicio/inicio.module#InicioPageModule' },
-    { path: 'login', loadChildren: './login/login.module#LoginPageModule' }
+    { path: 'login', loadChildren: './login/login.module#LoginPageModule' },
+    { path: 'inicio', loadChildren: './inicio/inicio.module#InicioPageModule' },
+    { path: 'landing', loadChildren: './pages/landing/landing.module#LandingPageModule' },
+    { path: 'login', loadChildren: './pages/auth/login/login.module#LoginPageModule' },
+    { path: 'register', loadChildren: './pages/auth/register/register.module#RegisterPageModule' },
+    { path: 'dashboard', loadChildren: './pages/dashboard/dashboard.module#DashboardPageModule' }
 ];
 var AppRoutingModule = /** @class */ (function () {
     function AppRoutingModule() {
@@ -522,7 +546,7 @@ var AppRoutingModule = /** @class */ (function () {
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<ion-app>\n  <ion-router-outlet></ion-router-outlet>\n</ion-app>\n"
+module.exports = "<ion-app>\n  <ion-split-pane>\n    <ion-menu>\n      <ion-header>\n        <ion-toolbar>\n          <ion-title>Menu</ion-title>\n        </ion-toolbar>\n      </ion-header>\n      <ion-content>\n        <ion-list>\n          <ion-menu-toggle auto-hide=\"false\" *ngFor=\"let p of appPages\">\n            <ion-item [routerDirection]=\"'root'\" [routerLink]=\"[p.url]\">\n              <ion-icon slot=\"start\" [name]=\"p.icon\"></ion-icon>\n              <ion-label>\n                {{p.title}}\n              </ion-label>\n            </ion-item>\n          </ion-menu-toggle>\n          <ion-item (click)=\"logout()\">\n            <ion-icon slot=\"start\" name=\"log-out\"></ion-icon>\n            <ion-label>\n              Logout\n            </ion-label>\n          </ion-item>\n        </ion-list>\n      </ion-content>\n    </ion-menu>\n    <ion-router-outlet main></ion-router-outlet>\n  </ion-split-pane>\n</ion-app>"
 
 /***/ }),
 
@@ -543,6 +567,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _ionic_native_status_bar_ngx__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @ionic-native/status-bar/ngx */ "./node_modules/@ionic-native/status-bar/ngx/index.js");
 /* harmony import */ var _ionic_native_fcm_ngx__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @ionic-native/fcm/ngx */ "./node_modules/@ionic-native/fcm/ngx/index.js");
 /* harmony import */ var _ionic_native_local_notifications_ngx__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! @ionic-native/local-notifications/ngx */ "./node_modules/@ionic-native/local-notifications/ngx/index.js");
+/* harmony import */ var _services_auth_service__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./services/auth.service */ "./src/app/services/auth.service.ts");
+/* harmony import */ var _services_alert_service__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./services/alert.service */ "./src/app/services/alert.service.ts");
+
+
 
 
 
@@ -551,12 +579,32 @@ __webpack_require__.r(__webpack_exports__);
 
 
 var AppComponent = /** @class */ (function () {
-    function AppComponent(platform, splashScreen, statusBar, fcm, localNotifications) {
+    function AppComponent(platform, splashScreen, statusBar, fcm, localNotifications, authService, navCtrl, alertService) {
         this.platform = platform;
         this.splashScreen = splashScreen;
         this.statusBar = statusBar;
         this.fcm = fcm;
         this.localNotifications = localNotifications;
+        this.authService = authService;
+        this.navCtrl = navCtrl;
+        this.alertService = alertService;
+        this.appPages = [
+            {
+                title: 'Dashboard',
+                url: '/dashboard',
+                icon: 'home'
+            },
+            {
+                title: 'Home',
+                url: '/home',
+                icon: 'home'
+            },
+            {
+                title: 'List',
+                url: '/list',
+                icon: 'list'
+            },
+        ];
         this.initializeApp();
     }
     AppComponent.prototype.initializeApp = function () {
@@ -601,6 +649,17 @@ var AppComponent = /** @class */ (function () {
             });
         });
     };
+    // When Logout Button is pressed 
+    AppComponent.prototype.logout = function () {
+        var _this = this;
+        this.authService.logout().subscribe(function (data) {
+            _this.alertService.presentToast(data['message']);
+        }, function (error) {
+            console.log(error);
+        }, function () {
+            _this.navCtrl.navigateRoot('/landing');
+        });
+    };
     AppComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Component"])({
             selector: 'app-root',
@@ -610,7 +669,10 @@ var AppComponent = /** @class */ (function () {
             _ionic_native_splash_screen_ngx__WEBPACK_IMPORTED_MODULE_3__["SplashScreen"],
             _ionic_native_status_bar_ngx__WEBPACK_IMPORTED_MODULE_4__["StatusBar"],
             _ionic_native_fcm_ngx__WEBPACK_IMPORTED_MODULE_5__["FCM"],
-            _ionic_native_local_notifications_ngx__WEBPACK_IMPORTED_MODULE_6__["LocalNotifications"]])
+            _ionic_native_local_notifications_ngx__WEBPACK_IMPORTED_MODULE_6__["LocalNotifications"],
+            _services_auth_service__WEBPACK_IMPORTED_MODULE_7__["AuthService"],
+            _ionic_angular__WEBPACK_IMPORTED_MODULE_2__["NavController"],
+            _services_alert_service__WEBPACK_IMPORTED_MODULE_8__["AlertService"]])
     ], AppComponent);
     return AppComponent;
 }());
@@ -828,6 +890,192 @@ var LoginService = /** @class */ (function () {
 
 /***/ }),
 
+/***/ "./src/app/services/alert.service.ts":
+/*!*******************************************!*\
+  !*** ./src/app/services/alert.service.ts ***!
+  \*******************************************/
+/*! exports provided: AlertService */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "AlertService", function() { return AlertService; });
+/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
+/* harmony import */ var _ionic_angular__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @ionic/angular */ "./node_modules/@ionic/angular/dist/fesm5.js");
+
+
+
+var AlertService = /** @class */ (function () {
+    function AlertService(toastController) {
+        this.toastController = toastController;
+    }
+    AlertService.prototype.presentToast = function (message) {
+        return tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"](this, void 0, void 0, function () {
+            var toast;
+            return tslib__WEBPACK_IMPORTED_MODULE_0__["__generator"](this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, this.toastController.create({
+                            message: message,
+                            duration: 2000,
+                            position: 'top',
+                            color: 'dark'
+                        })];
+                    case 1:
+                        toast = _a.sent();
+                        toast.present();
+                        return [2 /*return*/];
+                }
+            });
+        });
+    };
+    AlertService = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Injectable"])({
+            providedIn: 'root'
+        }),
+        tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:paramtypes", [_ionic_angular__WEBPACK_IMPORTED_MODULE_2__["ToastController"]])
+    ], AlertService);
+    return AlertService;
+}());
+
+
+
+/***/ }),
+
+/***/ "./src/app/services/auth.service.ts":
+/*!******************************************!*\
+  !*** ./src/app/services/auth.service.ts ***!
+  \******************************************/
+/*! exports provided: AuthService */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "AuthService", function() { return AuthService; });
+/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
+/* harmony import */ var _angular_common_http__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/common/http */ "./node_modules/@angular/common/fesm5/http.js");
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
+/* harmony import */ var rxjs_operators__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! rxjs/operators */ "./node_modules/rxjs/_esm5/operators/index.js");
+/* harmony import */ var _env_service__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./env.service */ "./src/app/services/env.service.ts");
+
+
+
+
+
+var AuthService = /** @class */ (function () {
+    function AuthService(http, 
+    //private storage: NativeStorage,
+    env) {
+        this.http = http;
+        this.env = env;
+        this.isLoggedIn = false;
+    }
+    AuthService.prototype.login = function (email, password) {
+        return true;
+        // return this.http.post(this.env.API_URL + 'auth/login',
+        //   {email: email, password: password}
+        // ).pipe(
+        //   tap(token => {
+        //     this.storage.setItem('token', token)
+        //     .then(
+        //       () => {
+        //         console.log('Token Stored');
+        //       },
+        //       error => console.error('Error storing item', error)
+        //     );
+        //     this.token = token;
+        //     this.isLoggedIn = true;
+        //     return token;
+        //   }),
+        // );
+    };
+    AuthService.prototype.register = function (fName, lName, email, password) {
+        return this.http.post(this.env.API_URL + 'auth/register', { fName: fName, lName: lName, email: email, password: password });
+    };
+    AuthService.prototype.logout = function () {
+        var _this = this;
+        var headers = new _angular_common_http__WEBPACK_IMPORTED_MODULE_1__["HttpHeaders"]({
+            'Authorization': 'xx'
+        });
+        return this.http.get(this.env.API_URL + 'auth/logout', { headers: headers })
+            .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["tap"])(function (data) {
+            //this.storage.remove("token");
+            _this.isLoggedIn = false;
+            delete _this.token;
+            return data;
+        }));
+    };
+    AuthService.prototype.user = function () {
+        var headers = new _angular_common_http__WEBPACK_IMPORTED_MODULE_1__["HttpHeaders"]({
+            'Authorization': ''
+        });
+        return this.http.get(this.env.API_URL + 'auth/user', { headers: headers })
+            .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["tap"])(function (user) {
+            return user;
+        }));
+    };
+    AuthService.prototype.getToken = function () {
+        return 'token';
+        // return this.storage.getItem('token').then(
+        //   data => {
+        //     this.token = data;
+        //     if(this.token != null) {
+        //       this.isLoggedIn=true;
+        //     } else {
+        //       this.isLoggedIn=false;
+        //     }
+        //   },
+        //   error => {
+        //     this.token = null;
+        //     this.isLoggedIn=false;
+        //   }
+        // );
+    };
+    AuthService = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_2__["Injectable"])({
+            providedIn: 'root'
+        }),
+        tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:paramtypes", [_angular_common_http__WEBPACK_IMPORTED_MODULE_1__["HttpClient"],
+            _env_service__WEBPACK_IMPORTED_MODULE_4__["EnvService"]])
+    ], AuthService);
+    return AuthService;
+}());
+
+
+
+/***/ }),
+
+/***/ "./src/app/services/env.service.ts":
+/*!*****************************************!*\
+  !*** ./src/app/services/env.service.ts ***!
+  \*****************************************/
+/*! exports provided: EnvService */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "EnvService", function() { return EnvService; });
+/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
+
+
+var EnvService = /** @class */ (function () {
+    function EnvService() {
+        this.API_URL = '';
+    }
+    EnvService = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Injectable"])({
+            providedIn: 'root'
+        }),
+        tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:paramtypes", [])
+    ], EnvService);
+    return EnvService;
+}());
+
+
+
+/***/ }),
+
 /***/ "./src/environments/environment.ts":
 /*!*****************************************!*\
   !*** ./src/environments/environment.ts ***!
@@ -889,7 +1137,7 @@ Object(_angular_platform_browser_dynamic__WEBPACK_IMPORTED_MODULE_1__["platformB
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(/*! D:\Proyectos_Ionic\miPrimeraAplicacion\myApp\src\main.ts */"./src/main.ts");
+module.exports = __webpack_require__(/*! D:\Proyectos_Ionic\ionic_notifica_proveedores\src\main.ts */"./src/main.ts");
 
 
 /***/ })

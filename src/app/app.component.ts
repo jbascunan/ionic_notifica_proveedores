@@ -1,10 +1,12 @@
 import { Component } from '@angular/core';
 
-import { Platform } from '@ionic/angular';
+import { Platform, NavController } from '@ionic/angular';
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
 import { FCM, NotificationData } from '@ionic-native/fcm/ngx';
 import { LocalNotifications } from '@ionic-native/local-notifications/ngx';
+import { AuthService } from './services/auth.service';
+import { AlertService } from './services/alert.service';
 
 @Component({
   selector: 'app-root',
@@ -16,7 +18,10 @@ export class AppComponent {
     private splashScreen: SplashScreen,
     private statusBar: StatusBar,
     private fcm: FCM,
-    public localNotifications: LocalNotifications
+    public localNotifications: LocalNotifications,
+    private authService: AuthService,
+    private navCtrl: NavController,
+    private alertService: AlertService
   ) {
     this.initializeApp();
   }
@@ -69,5 +74,38 @@ export class AppComponent {
       });
 
     });
+  }
+
+  public appPages = [
+    {
+      title: 'Dashboard',
+      url: '/dashboard',
+      icon: 'home'
+    },
+    {
+      title: 'Home',
+      url: '/home',
+      icon: 'home'
+    },
+    {
+      title: 'List',
+      url: '/list',
+      icon: 'list'
+    },
+  ];
+
+  // When Logout Button is pressed 
+  logout() {
+    this.authService.logout().subscribe(
+      data => {
+        this.alertService.presentToast(data['message']);        
+      },
+      error => {
+        console.log(error);
+      },
+      () => {
+        this.navCtrl.navigateRoot('/landing');
+      }
+    );
   }
 }
